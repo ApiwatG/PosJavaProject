@@ -6,17 +6,27 @@ public class MenuItem {
     private double price;
     private int quantity;
     private String imagePath;
-
-    public MenuItem(int itemId, String name, double price, int quantity) {
+    
+    public MenuItem() {
+    	 itemId = 0;
+    	    name = "";
+    	    price = 0;
+    	    quantity = 0;
+    	    imagePath = "";
+    }
+    
+    public MenuItem(int itemId, String name, double price, int quantity, String imagePath) {
         this.itemId = itemId;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+        this.imagePath = imagePath;
     }
 
-    public MenuItem() {
-
-    }
+    // Constructor without imagePath (optional)
+   
+    
+    
 
     // Getters
     public int getItemId() { return itemId; }
@@ -31,4 +41,13 @@ public class MenuItem {
     public void setPrice(double price) { this.price = price; }
     public void setItemType(int quantity) { this.quantity = quantity; }
     public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+
+	public void MenuItem(int itemId, String name, double price, int quantity) {
+		this.itemId = itemId;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+		
+	}
+
 }

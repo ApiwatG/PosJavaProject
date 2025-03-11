@@ -71,14 +71,14 @@ public class Orderview extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Wong Nokk POS System");
 
-        BT3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/pic/3.png"))); // NOI18N
+        BT3.setIcon(new javax.swing.ImageIcon(getClass().getResource("main/java/View/pic/3.png"))); // NOI18N
         BT3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BT3ActionPerformed(evt);
             }
         });
 
-        BT1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/pic/1.png"))); // NOI18N
+        BT1.setIcon(new javax.swing.ImageIcon(getClass().getResource("main/java/Viewpic/1.png"))); // NOI18N
         BT1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
             }

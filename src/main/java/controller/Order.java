@@ -26,7 +26,7 @@ public class Order {
         return "ORD" + System.currentTimeMillis();
     }
 
-    public void addItem(MenuItem item, int i) {
+    public void addItem(MenuItem item, double d) {
         items.add(item);
         totalAmount += item.getPrice();
     }
@@ -59,7 +59,7 @@ public class Order {
     }
 
     public String getOrderID() {
-        return orderID;
+        return orderID = generateOrderID();
     }
 
     public void setOrderTime(String timeString) {
