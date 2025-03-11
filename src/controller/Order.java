@@ -66,7 +66,8 @@ public class Order {
             stmt.setTimestamp(5, timestamp);
 
             stmt.executeUpdate();
-            System.out.println("Order saved successfully");
+            System.out.println("Order saved successfully")
+                    System.out.println("Hello");
         } catch (SQLException e) {
             e.printStackTrace();
         }
