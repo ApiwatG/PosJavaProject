@@ -1,13 +1,9 @@
 package controller;
 
-import javax.swing.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.sql.*;
 import java.util.Date;
 
 public class Order {
@@ -30,7 +26,7 @@ public class Order {
         return "ORD" + System.currentTimeMillis();
     }
 
-    public void addItem(MenuItem item) {
+    public void addItem(MenuItem item, int i) {
         items.add(item);
         totalAmount += item.getPrice();
     }

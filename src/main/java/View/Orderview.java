@@ -4,17 +4,34 @@
  */
 package View;
 
+import controller.MenuItem;
+import controller.Order;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.util.Vector;
+
 /**
  *
  * @author POS apiwat
  */
 public class Orderview extends javax.swing.JFrame {
+    Order order = new Order();
 
-    /**
-     * Creates new form Order
-     */
     public Orderview() {
         initComponents();
+
+    }
+    public void addtable(int id,String Name, int Qty ,Double Price){
+        DefaultTableModel dt = (DefaultTableModel)jTable1.getModel();
+        Vector v = new Vector();
+        v.add(id);
+        v.add(Name);
+        v.add(Qty);
+        v.add(Price);
+
+        dt.addRow(v);
     }
 
     /**
@@ -62,6 +79,10 @@ public class Orderview extends javax.swing.JFrame {
         });
 
         BT1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/pic/1.png"))); // NOI18N
+        BT1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            }
+        });
         BT1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BT1ActionPerformed(evt);
@@ -117,13 +138,9 @@ public class Orderview extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setBackground(new java.awt.Color(255, 255, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "ID", "Name", "quantity", "Price"
@@ -282,9 +299,9 @@ public class Orderview extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
-    private void BT1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BT1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BT1ActionPerformed
+    private void BT1ActionPerformed(java.awt.event.ActionEvent evt) {
+     addtable(1,"Test",1,2.99);
+    }
 
     private void BT3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BT3ActionPerformed
         // TODO add your handling code here:
@@ -305,6 +322,8 @@ public class Orderview extends javax.swing.JFrame {
     private void BT9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BT9ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BT9ActionPerformed
+
+
 
     /**
      * @param args the command line arguments
