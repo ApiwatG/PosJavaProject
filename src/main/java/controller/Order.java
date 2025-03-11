@@ -1,6 +1,8 @@
 package controller;
 
 import javax.swing.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import java.time.LocalDateTime;
@@ -55,12 +57,24 @@ public class Order {
         return Orderstatus;
     }
 
-    public Date getOrderTime() {
-        return orderTime;
+    public String getOrderTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        return dateFormat.format(this.orderTime);
     }
 
     public String getOrderID() {
         return orderID;
+    }
+
+    public void setOrderTime(String timeString) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            this.orderTime = dateFormat.parse(timeString);
+        } catch (ParseException e) {
+            // Handle parsing error
+            System.err.println("Invalid date format. Please use dd/MM/yyyy HH:mm:ss");
+            e.printStackTrace();
+        }
     }
 
     @Override
