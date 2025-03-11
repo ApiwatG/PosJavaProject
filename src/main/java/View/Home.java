@@ -4,10 +4,14 @@
  */
 package View;
 
+import View.Orderview;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author POS apiwat
  */
+
 public class Home extends javax.swing.JFrame {
 
     /**
@@ -54,9 +58,14 @@ public class Home extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         TB2.setText("Table1");
+        TB2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                non(evt);
+            }
+        });
         TB2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TB2ActionPerformed(evt);
+                display(evt);
             }
         });
 
@@ -336,29 +345,47 @@ public class Home extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TB2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TB2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TB2ActionPerformed
-
     private void TB3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TB3ActionPerformed
-        // TODO add your handling code here:
+    Orderview order = new Orderview();
+    order.setVisible(true);
+    this.dispose(); // ปิดหน้า Home
     }//GEN-LAST:event_TB3ActionPerformed
 
     private void TB4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TB4ActionPerformed
-        // TODO add your handling code here:
+       Orderview order = new Orderview();
+    order.setVisible(true);
+    this.dispose();
     }//GEN-LAST:event_TB4ActionPerformed
 
     private void TB5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TB5ActionPerformed
-        // TODO add your handling code here:
+    Orderview order = new Orderview();
+    order.setVisible(true);
+    this.dispose();
     }//GEN-LAST:event_TB5ActionPerformed
 
     private void TB6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TB6ActionPerformed
-        // TODO add your handling code here:
+    Orderview order = new Orderview();
+    order.setVisible(true);
+    this.dispose();
     }//GEN-LAST:event_TB6ActionPerformed
 
     private void TB7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TB7ActionPerformed
-        // TODO add your handling code here:
+    Orderview order = new Orderview();
+    order.setVisible(true);
+    this.dispose();
     }//GEN-LAST:event_TB7ActionPerformed
+
+    private void non(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_non
+    Orderview order = new Orderview();
+    order.setVisible(true);
+    this.dispose();
+    }//GEN-LAST:event_non
+
+    private void display(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_display
+    Orderview order = new Orderview();
+    order.setVisible(true);
+    this.dispose();
+    }//GEN-LAST:event_display
 
     /**
      * @param args the command line arguments
