@@ -19,12 +19,12 @@ public class POSSystem {
         this.dashboard = new Dashboard();
     }
 
-    public Order takeOrder(List<MenuItem> items) {
-        Order newOrder = new Order(generateOrderId());
-        items.forEach(newOrder::addItem);
-        orders.add(newOrder);
-        return newOrder;
-    }
+//    public Order takeOrder(List<MenuItem> items) {
+//        Order newOrder = new Order(generateOrderId());
+//        items.forEach(newOrder::addItem);
+//        orders.add(newOrder);
+//        return newOrder;
+//    }
 
     public void processPayment(Order order, Payment payment) {
         if (payment.getAmount() >= order.getTotalAmount()) {

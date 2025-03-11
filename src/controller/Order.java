@@ -90,7 +90,7 @@ public class Order {
                 Timestamp timestamp = rs.getTimestamp("order_date");
                 LocalDateTime dateTime = timestamp.toLocalDateTime();
 
-                orders.add(new Order(id));
+              //  orders.add(new Order(id));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -114,7 +114,7 @@ public class Order {
                     Timestamp timestamp = rs.getTimestamp("order_date");
                     LocalDateTime dateTime = timestamp.toLocalDateTime();
 
-                    return new Order(orderId);
+                //    return new Order(orderId);
                 }
             }
         } catch (SQLException e) {
