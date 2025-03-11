@@ -10,7 +10,7 @@ public class Order {
     private String orderStatus;
     private String orderDate;
     private String name;
-
+    system.out.println("Hello");
     LocalDateTime now = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     String formattedDate = now.format(formatter);
@@ -67,6 +67,7 @@ public class Order {
 
             stmt.executeUpdate();
             System.out.println("Order saved successfully");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
