@@ -17,10 +17,6 @@ public class Order {
     public static String dbPath = "jdbc:sqlite:" + "sample.db";
 
 
-    public Order(int id, String name2, double totalAmount2, String orderStatus2, LocalDateTime dateTime) {
-        // TODO Auto-generated constructor stub
-    }
-
     public int getOrderId() { return orderId; }
 
     public void setOrderId(int orderId) { this.orderId = orderId; }
@@ -94,7 +90,7 @@ public class Order {
                 Timestamp timestamp = rs.getTimestamp("order_date");
                 LocalDateTime dateTime = timestamp.toLocalDateTime();
 
-                orders.add(new Order(id, name, totalAmount, orderStatus, dateTime));
+                orders.add(new Order(id));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -118,7 +114,7 @@ public class Order {
                     Timestamp timestamp = rs.getTimestamp("order_date");
                     LocalDateTime dateTime = timestamp.toLocalDateTime();
 
-                    return new Order(orderId, name, totalAmount, orderStatus, dateTime);
+                    return new Order(orderId);
                 }
             }
         } catch (SQLException e) {

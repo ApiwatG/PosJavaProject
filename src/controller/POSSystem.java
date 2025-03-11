@@ -16,7 +16,7 @@ public class POSSystem {
         this.orders = new ArrayList<>();
         this.kitchen = new Kitchen();
         this.payments = new ArrayList<>();
-        this.dashboard = new Dashboard();ห
+        this.dashboard = new Dashboard();
     }
 
     public Order takeOrder(List<MenuItem> items) {
