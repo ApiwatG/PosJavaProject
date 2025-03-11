@@ -1,11 +1,10 @@
 package controller;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
 
 /**
  * Product class that generates SQL files to store order information
@@ -15,6 +14,10 @@ public class Product {
     private String name;
     private double price;
     private Order order; // Reference to the order this product belongs to
+
+    // Database file location - can be changed as needed
+    private static final String DB_FILE = "orders.db";
+    private static final String DB_URL = "jdbc:sqlite:" + DB_FILE;
 
     /**
      * Constructor for Product with name and price
@@ -34,127 +37,185 @@ public class Product {
     }
 
     /**
-     * Generate SQL INSERT statement for this product in its order
-     * @return SQL INSERT statement
-     */
-    public String generateSqlInsert() {
-        if (order == null) {
-            throw new IllegalStateException("Product must be associated with an order before generating SQL");
-        }
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            String formattedDate = dateFormat.format(inputFormat.parse(order.getOrderTime()));
-
-            return String.format(
-                    "INSERT INTO orders (order_id, product_name, price, order_time) " +
-                            "VALUES ('%s', '%s', %.2f, '%s');",
-                    order.getOrderID(), name, price, formattedDate);
-        } catch (Exception e) {
-            System.err.println("Error formatting date: " + e.getMessage());
-            return "-- Error generating SQL for " + name;
-        }
-    }
-
-    /**
-     * Save this product's order to SQL file
+     * Create and initialize a new database file
+     * @param dbFilePath Path where the database file should be created
      * @return true if successful, false otherwise
      */
-    public boolean saveToSqlFile(String filePath) {
-        if (order == null) {
-            throw new IllegalStateException("Product must be associated with an order before saving to SQL");
-        }
+    public static boolean createDatabaseFile(String dbFilePath) {
+        // Use the specified path or default if not provided
+        String dbUrl = "jdbc:sqlite:" + (dbFilePath != null ? dbFilePath : DB_FILE);
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath, true))) {
-            writer.println(generateSqlInsert());
+        try (Connection conn = DriverManager.getConnection(dbUrl);
+             Statement stmt = conn.createStatement()) {
+
+            // Create the orders table
+            String createTableSQL =
+                    "CREATE TABLE IF NOT EXISTS orders (" +
+                            "    id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                            "    order_id TEXT NOT NULL," +
+                            "    product_name TEXT NOT NULL," +
+                            "    price REAL NOT NULL," +
+                            "    order_time TEXT NOT NULL" +
+                            ");";
+
+            stmt.execute(createTableSQL);
+
+            // Create an index on order_id for faster lookups
+            stmt.execute("CREATE INDEX IF NOT EXISTS idx_order_id ON orders (order_id);");
+
+            System.out.println("Database file created successfully at: " +
+                    (dbFilePath != null ? dbFilePath : new File(DB_FILE).getAbsolutePath()));
             return true;
-        } catch (IOException e) {
-            System.err.println("Error writing to SQL file: " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Error creating database file: " + e.getMessage());
             return false;
         }
     }
 
     /**
-     * Generate SQL file with table creation and multiple orders
-     * @param orders List of Order objects to include in the SQL file
-     * @param filePath Path to save the SQL file
+     * Save this product to the database file
      * @return true if successful, false otherwise
      */
-    public static boolean generateSqlFile(List<Order> orders, String filePath) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
-            // Write SQL table creation statement
-            writer.println("-- SQL Script to create orders table and insert data");
-            writer.println("CREATE TABLE IF NOT EXISTS orders (");
-            writer.println("    id INT AUTO_INCREMENT PRIMARY KEY,");
-            writer.println("    order_id VARCHAR(50) NOT NULL,");
-            writer.println("    product_name VARCHAR(100) NOT NULL,");
-            writer.println("    price DECIMAL(10, 2) NOT NULL,");
-            writer.println("    order_time DATETIME NOT NULL,");
-            writer.println("    INDEX (order_id)");
-            writer.println(");");
-            writer.println();
+    public boolean saveToDatabase() {
+        if (order == null) {
+            throw new IllegalStateException("Product must be associated with an order before saving to database");
+        }
 
-            // Format for SQL dates
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(
+                     "INSERT INTO orders (order_id, product_name, price, order_time) VALUES (?, ?, ?, ?)")) {
 
-            // Write SQL inserts for each product in each order
-            writer.println("-- Order data");
+            pstmt.setString(1, order.getOrderID());
+            pstmt.setString(2, name);
+            pstmt.setDouble(3, price);
+            pstmt.setString(4, order.getOrderTime());
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error saving to database: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Save multiple orders to the database file
+     * @param orders List of Order objects to include in the database
+     * @return true if successful, false otherwise
+     */
+    public static boolean saveOrdersToDatabase(List<Order> orders) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(
+                     "INSERT INTO orders (order_id, product_name, price, order_time) VALUES (?, ?, ?, ?)")) {
+
+            conn.setAutoCommit(false);
+
             for (Order order : orders) {
                 ArrayList<MenuItem> items = order.getItems();
+
                 for (MenuItem item : items) {
-                    Product product = new Product(item, order);
-                    writer.println(product.generateSqlInsert());
+                    pstmt.setString(1, order.getOrderID());
+                    pstmt.setString(2, item.getName());
+                    pstmt.setDouble(3, item.getPrice());
+                    pstmt.setString(4, order.getOrderTime());
+                    pstmt.addBatch();
                 }
             }
 
-            return true;
-        } catch (IOException e) {
-            System.err.println("Error creating SQL file: " + e.getMessage());
+            int[] results = pstmt.executeBatch();
+            conn.commit();
+
+            return results.length > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error saving orders to database: " + e.getMessage());
             return false;
         }
     }
 
     /**
-     * Generate SQL file for a single order with all its items
-     * @param order The order to convert to SQL
-     * @param filePath Path to save the SQL file
+     * Save a single order to the database file
+     * @param order The order to save
      * @return true if successful, false otherwise
      */
-    public static boolean generateOrderSqlFile(Order order, String filePath) {
+    public static boolean saveOrderToDatabase(Order order) {
         List<Order> orders = new ArrayList<>();
         orders.add(order);
-        return generateSqlFile(orders, filePath);
+        return saveOrdersToDatabase(orders);
     }
 
     /**
-     * Convert all menu items in an order to products and save to SQL
-     * @param order The order containing menu items
-     * @param filePath Path to save the SQL file
-     * @return true if successful, false otherwise
+     * Retrieve all orders from the database file
+     * @return List of order records as strings
      */
-    public static boolean saveOrderToSqlFile(Order order, String filePath) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath, true))) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    public static List<String> retrieveAllOrders() {
+        List<String> results = new ArrayList<>();
 
-            String formattedDate = dateFormat.format(inputFormat.parse(order.getOrderTime()));
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM orders ORDER BY order_time")) {
 
-            for (MenuItem item : order.getItems()) {
-                String sqlInsert = String.format(
-                        "INSERT INTO orders (order_id, product_name, price, order_time) " +
-                                "VALUES ('%s', '%s', %.2f, '%s');",
-                        order.getOrderID(), item.getName(), item.getPrice(), formattedDate);
-
-                writer.println(sqlInsert);
+            while (rs.next()) {
+                String orderRecord = String.format(
+                        "Order ID: %s, Product: %s, Price: $%.2f, Time: %s",
+                        rs.getString("order_id"),
+                        rs.getString("product_name"),
+                        rs.getDouble("price"),
+                        rs.getString("order_time")
+                );
+                results.add(orderRecord);
             }
 
-            return true;
-        } catch (Exception e) {
-            System.err.println("Error writing to SQL file: " + e.getMessage());
-            return false;
+        } catch (SQLException e) {
+            System.err.println("Error retrieving orders: " + e.getMessage());
         }
+
+        return results;
+    }
+
+    /**
+     * Retrieve orders by order ID from the database file
+     * @param orderId The order ID to search for
+     * @return List of order records as strings
+     */
+    public static List<String> retrieveOrderById(String orderId) {
+        List<String> results = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(
+                     "SELECT * FROM orders WHERE order_id = ? ORDER BY order_time")) {
+
+            pstmt.setString(1, orderId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String orderRecord = String.format(
+                            "Order ID: %s, Product: %s, Price: $%.2f, Time: %s",
+                            rs.getString("order_id"),
+                            rs.getString("product_name"),
+                            rs.getDouble("price"),
+                            rs.getString("order_time")
+                    );
+                    results.add(orderRecord);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error retrieving order by ID: " + e.getMessage());
+        }
+
+        return results;
+    }
+
+    /**
+     * Check if the database file exists
+     * @param dbFilePath Optional custom path to check
+     * @return true if the database file exists, false otherwise
+     */
+    public static boolean databaseFileExists(String dbFilePath) {
+        File dbFile = new File(dbFilePath != null ? dbFilePath : DB_FILE);
+        return dbFile.exists();
     }
 
     // Getters and setters
@@ -182,4 +243,3 @@ public class Product {
         this.order = order;
     }
 }
-
