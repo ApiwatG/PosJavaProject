@@ -331,9 +331,7 @@ public class Home extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -364,8 +362,8 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_TB6ActionPerformed
 
     private void TB7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TB7ActionPerformed
-     Orderview_version_WB order = new Orderview_version_WB();
-    order.setVisible(true);
+     Login login = new Login(); // แก้ไขจาก login เป็น Login (ตัวพิมพ์ใหญ่)
+    login.setVisible(true);
     this.dispose();
     }//GEN-LAST:event_TB7ActionPerformed
 
