@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -31,7 +32,7 @@ public class Orderview_version_WB extends JFrame {
     private JTextField textField;
     static Order o = new Order();
     static MenuItem M = new MenuItem();
-    private JLabel lblNewLabel_1; // Make this a class field for easier access
+    private JLabel lblNewLabel_1; // Make this a class field for easier acess
     
     // Declare all buttons as class fields
     private JButton btnNewButton;
@@ -49,6 +50,10 @@ public class Orderview_version_WB extends JFrame {
         setSize(998, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
+        
+            
+          
+
 
         // Table setup
         String[] columnNames = {"ID", "Name", "price", "Time"};
@@ -305,6 +310,18 @@ public class Orderview_version_WB extends JFrame {
         btnNewButton_1_1_1_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 25));
         btnNewButton_1_1_1_1_1_1_1.setBounds(606, 523, 140, 124);
         getContentPane().add(btnNewButton_1_1_1_1_1_1_1);
+        
+        JButton btnNewButton_3 = new JButton("Back");
+        btnNewButton_3.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        btnNewButton_3.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		 Home home = new Home();
+        	        home.setVisible(true);
+        	        dispose();
+        	}
+        });
+        btnNewButton_3.setBounds(42, 586, 150, 61);
+        getContentPane().add(btnNewButton_3);
         
         // Initialize the total display to show 0.00
         updateTotalDisplay();
