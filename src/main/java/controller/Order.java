@@ -31,11 +31,6 @@ public class Order {
         totalAmount += item.getPrice();
     }
 
-    public void removeItem(MenuItem item) {
-        if (items.remove(item)) {
-            totalAmount -= item.getPrice();
-        }
-    }
 
     public ArrayList<MenuItem> getItems() {
         return items;
@@ -71,7 +66,19 @@ public class Order {
             System.err.println("Invalid date format. Please use dd/MM/yyyy HH:mm:ss");
             e.printStackTrace();
         }
+    } 
+    public void removeItemAmount(double price) {
+ 
+        if (totalAmount >= price) {
+            totalAmount -= price;
+        } else {
+            totalAmount = 0.0;
+        }
     }
+    public void removeItem(MenuItem item, double price) {
+        removeItemAmount(price);
+    }
+
 
     @Override
     public String toString() {
@@ -90,4 +97,9 @@ public class Order {
 
         return sb.toString();
     }
+
+	public void setTotalAmount(double d) {
+		this.totalAmount = d;
+		
+	}
 }
