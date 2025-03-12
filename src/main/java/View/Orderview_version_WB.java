@@ -45,12 +45,13 @@ public class Orderview_version_WB extends JFrame {
     private JButton btnNewButton_1_2_1;
     private JButton btnNewButton_2_1;
     public int id = 0;
+    public int totalorder = 0;
     public Orderview_version_WB() {
         setTitle("New Orderview");
         setSize(998, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
-        
+     
             
           
 
@@ -304,7 +305,9 @@ public class Orderview_version_WB extends JFrame {
                     "Date/Time: " + o.getOrderTime() + "\n" +
                     "Total Amount: $" + String.format("%.2f", o.getTotalAmount()) + "\n" +
                     "Thank you for your order!"
+                 
                 );
+                ++totalorder;
             }
         });
         btnNewButton_1_1_1_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 25));
