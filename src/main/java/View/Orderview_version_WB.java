@@ -43,7 +43,7 @@ public class Orderview_version_WB extends JFrame {
     private JButton btnNewButton_1_1_1_1;
     private JButton btnNewButton_1_2_1;
     private JButton btnNewButton_2_1;
-
+    public int id = 0;
     public Orderview_version_WB() {
         setTitle("New Orderview");
         setSize(998, 750);
@@ -110,38 +110,45 @@ public class Orderview_version_WB extends JFrame {
                 
                 // Determine which menu item to add based on the button
                 if (source == btnNewButton) {
-                    M.MenuItem(1, "luGshin", 58.0, 1);
+                    M.MenuItem(id, "luGshin", 58.0, 1);
+                    ++id;
                 } else if (source == btnNewButton_1) {
-                    M.MenuItem(2, "donustod", 50.0, 1);
+                    M.MenuItem(id, "donustod", 50.0, 1);
+                    ++id;
                 } else if (source == btnNewButton_1_1) {
-                    M.MenuItem(3, "kungtodkateam", 70.0, 1);
+                    M.MenuItem(id, "kungtodkateam", 70.0, 1);
+                    ++id;
                 } else if (source == btnNewButton_1_1_1) {
-                    M.MenuItem(2, "krawpadkung", 75.0, 1);
+                    M.MenuItem(id, "krawpadkung", 75.0, 1);
+                    ++id;
                 } else if (source == btnNewButton_1_2) {
-                    M.MenuItem(5, "krawpadsubparod", 75.0, 1);
+                    M.MenuItem(id, "krawpadsubparod", 75.0, 1);
+                    ++id;
                 } else if (source == btnNewButton_2) {
-                    M.MenuItem(4, "Krawmadkai", 65.0, 1);
+                    M.MenuItem(id, "Krawmadkai", 65.0, 1);
+                    ++id;
                 } else if (source == btnNewButton_1_1_1_1) {
-                    M.MenuItem(4, "namnung", 75.0, 1);
+                    M.MenuItem(id, "namnung", 75.0, 1);
+                    ++id;
                 } else if (source == btnNewButton_1_2_1) {
-                    M.MenuItem(8, "padthai", 65.0, 1);
+                    M.MenuItem(id, "padthai", 65.0, 1);
+                    ++id;
                 } else if (source == btnNewButton_2_1) {
-                    M.MenuItem(7, "Muusadte", 75.0, 1);
+                    M.MenuItem(id, "Muusadte", 75.0, 1);
+                    ++id;
                 }
                 
-                // Add the item to the order
+             
                 o.addItem(M, M.getPrice());
                 
-                // Add the item to the table
-                tableModel.addRow(new Object[]{o.getOrderID(), M.getName(), 
+      
+                tableModel.addRow(new Object[]{id, M.getName(), 
                                               M.getPrice(), o.getOrderTime()});
                 
-                // Update the total display
                 updateTotalDisplay();
             }
         };
-        
-        // Configure and add action listeners to buttons
+       
         btnNewButton.setBounds(31, 34, 140, 124);
         try {
             Image img = ImageIO.read(getClass().getResource("pic/1.png"));
@@ -265,7 +272,7 @@ public class Orderview_version_WB extends JFrame {
                 if (selectedRow != -1) { // Ensure a row is selected
                     // Get the price of the item to be removed
                     double price = (double) tableModel.getValueAt(selectedRow, 2);
-                    
+                    id = id - 1;
                     // Remove the item from the table
                     tableModel.removeRow(selectedRow);
                     
